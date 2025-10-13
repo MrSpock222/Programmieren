@@ -1,5 +1,6 @@
 import random
 
+
 zahl = int(random.randint(1, 10))
 
 i = 1
