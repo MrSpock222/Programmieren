@@ -17,8 +17,8 @@ while True:
         print("Ungültige Eingabe, bitte 1 oder 2 eingeben.")
         
 
-    
 
+    
 
 
 
