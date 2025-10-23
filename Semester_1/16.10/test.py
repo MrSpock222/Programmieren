@@ -80,7 +80,7 @@ def ai():
         sys.exit(2)
 
     try:
-        response = model.generate_content("gib mir ein 5 buchstaben Wort auf deutsch, die Antwort darf nur das Wort enthalten, und muss 5 Buchstaben haben. Zähle immer nach bevor du die Antwort gibst, das es nicht mehr oder weniger als 5 Buchstaben sind. Pass auf das das Wort nicht immer das gleiche ist")
+        response = model.generate_content("gib mir ein 5-10 stelliges buchstaben Wort auf deutsch, die Antwort darf nur das Wort enthalten, und muss 5-10 Buchstaben haben. Zähle immer nach bevor du die Antwort gibst, das es nicht mehr oder weniger als 5-10 Buchstaben sind. Pass auf das das Wort nicht immer das gleiche ist und es soll nivau her nicht immer die einfachsten Wörter sein.")
         # Antwort prüfen
         
     except Exception as e:

@@ -1,9 +1,9 @@
 import test
-
+i= 0
 response = []
-# 'wort' wird als Maske für bereits erratene Buchstaben genutzt
+
 wort = None
-response = test.ai()
+response = test.ai().lower()
 
 
 x = list(response)
@@ -12,7 +12,7 @@ print("Hangman Game")
 print("Das Wort hat", len(response), "Buchstaben.")
 
 
-# initiale Maske mit Unterstrichen
+
 if response:
     wort = ["_" for _ in response]
     for _ in response:
@@ -29,16 +29,24 @@ while x != wort:
         if guess in wort:
             print("Diesen Buchstaben hast du bereits erraten.")
         elif response.find(guess) != -1:
-            # finde alle Indexpositionen des geratenen Buchstabens
+            
             indexes = [i for i, c in enumerate(response) if c == guess]
-            # setze die Maske an diesen Positionen (keine insert-Operation)
+            
             for index in indexes:
                 wort[index] = guess
-            # Ausgabe der aktuellen Maske
+            
             for ch in wort:
                 print(ch, end=" ")
     else:
         print("Falsch!")
+        for ch in wort:
+            print(ch, end=" ")
+        
+        i += 1
+        print("Du hast", i, "von 8 Versuchen verbraucht.")
+        if i == 8:
+            print("Du hast verloren! Das Wort war:", response)
+            break
 print("Fertig")
         
         
