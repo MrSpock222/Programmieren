@@ -6,14 +6,29 @@ print(rad_deg(50))
 
 
 #Uebung 2
-def palindrom(word):
-    a = []
-    while word > 0:
-        num = word%10
-        word//10
-        a.append(num)
-    for i in range(0, len(a)-i-1):
-        if a[i] != a[len(a)-1]:
-            return False
-    return True
+def palindrom(zahl):
+    
+    for i in 
 print(palindrom(200))
+
+
+#Uebung 3
+
+
+
+
+
+
+
+
+
+#Uebung 4
+text = "Hallo "
+def v_zaehlen(text):
+    i = 0
+    test = ["a","i","e","o","u"]
+    for char in text:
+        if char in test:
+            i +=1
+    return i
+print(v_zaehlen(text))
