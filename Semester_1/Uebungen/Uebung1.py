@@ -7,14 +7,30 @@ print(rad_deg(50))
 
 #Uebung 2
 def palindrom(zahl):
+    zahl = abs(int(zahl))
+    digits = []
+    while zahl > 0:
+        
+        digits.insert(0, zahl % 10)
+        zahl //= 10
     
-    for i in 
-print(palindrom(200))
+    if digits == digits[::-1]:
+        return True
+    else:
+        return False
+print(palindrom(232))
 
 
 #Uebung 3
 
-
+def primefaktorzerlegung(n):
+    primefaktoren = []
+    for i in range(2, n+1):
+        while n % i == 0:
+            primefaktoren.append(i)
+            n = n // i
+    return primefaktoren
+print(primefaktorzerlegung(97))
 
 
 
