@@ -35,9 +35,6 @@ print(primefaktorzerlegung(97))
 
 
 
-
-
-
 #Uebung 4
 text = "Hallo "
 def v_zaehlen(text):
