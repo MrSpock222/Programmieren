@@ -1,0 +1,2 @@
+def exponential(z,N):
+    
