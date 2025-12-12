@@ -1,0 +1,2 @@
+jan||porsche, lambo||55.0
+julia||gold||120.0

@@ -1,0 +1,2 @@
+sd,taun,5.0
+julia,gold,150.0
