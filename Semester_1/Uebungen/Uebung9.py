@@ -16,20 +16,20 @@ data = [
 
 def fix_errors(data):
     corrected = []
-    valid_velocities = []  # Speichert alle korrekten Geschwindigkeiten
+    valid_velocities = []  
     
     for i in range(len(data)):
         t, h, v = data[i]
         
         if i == 0:
-            # Erster Punkt ist immer korrekt
+            # Punkt eins, korrekt immer
             corrected.append((t, h, v))
             valid_velocities.append(v)
         else:
-            # Prüfe ob Meereshöhe-Änderung <= 2m
+            
             height_valid = abs(h - data[i-1][1]) <= 2
             
-            # Prüfe ob Geschwindigkeits-Änderung <= 50 km/h in 10 sec
+            
             last_v = corrected[i-1][2]
             velocity_valid = abs(v - last_v) <= 50
             
@@ -38,7 +38,7 @@ def fix_errors(data):
                 corrected.append((t, h, v))
                 valid_velocities.append(v)
             else:
-                # Fehlerhafter Punkt - ersetze Geschwindigkeit mit Durchschnitt
+                # Fehlerhafter Punkt 
                 avg_velocity = sum(valid_velocities) / len(valid_velocities)
                 corrected.append((t, h, avg_velocity))
     
@@ -64,31 +64,31 @@ items = {
 rucksack_groesse = 10
 
 def bepacken_rucksack(items, rucksack_groesse):
-    # Bounded Knapsack: Dynamische Programmierung mit Beschränkung der Einheiten pro Item
-    # dp[i] = maximaler Wert mit Rucksackgröße i
-    dp = [0] * (rucksack_groesse + 1)
-    # Speichere welche Items für optimale Lösung verwendet wurden
+    
+    # maxi = maximaler Wert
+    maxi = [0] * (rucksack_groesse + 1)
+    # Speichere Items 
     chosen = [[] for _ in range(rucksack_groesse + 1)]
     
     for item_name, item_data in items.items():
         max_einheiten = item_data["einheiten"]
         wert_pro_einheit = item_data["wert_pro_einheit"]
         
-        # Wichtig: Rückwärts durch die Rucksackgröße iterieren!
+        # Rückwärts durch Rucksackgröße iterieren
         for groesse in range(rucksack_groesse, 0, -1):
             # Versuche bis zu max_einheiten dieses Items hinzuzufügen
             for anzahl in range(1, min(max_einheiten + 1, groesse + 1)):
                 if groesse >= anzahl:
-                    neuer_wert = dp[groesse - anzahl] + (anzahl * wert_pro_einheit)
-                    if neuer_wert > dp[groesse]:
-                        dp[groesse] = neuer_wert
+                    neuer_wert = maxi[groesse - anzahl] + (anzahl * wert_pro_einheit)
+                    if neuer_wert > maxi[groesse]:
+                        maxi[groesse] = neuer_wert
                         chosen[groesse] = chosen[groesse - anzahl] + [item_name] * anzahl
-    
-    return dp[rucksack_groesse], chosen[rucksack_groesse]
+
+    return maxi[rucksack_groesse], chosen[rucksack_groesse]
 
 max_wert, items_gewaehlt = bepacken_rucksack(items, rucksack_groesse)
 
-# Zähle die Items
+# Zähle Items
 from collections import Counter
 items_count = Counter(items_gewaehlt)
 
