@@ -15,30 +15,90 @@ data = [
 
 
 def fix_errors(data):
-    # Identifiziere valide Punkte (Änderung <= 2)
-    valid_indices = [0]  # Erster ist immer valid
-    for i in range(1, len(data)):
-        if abs(data[i][1] - data[i-1][1]) <= 2:
-            valid_indices.append(i)
+    corrected = []
+    valid_velocities = []  # Speichert alle korrekten Geschwindigkeiten
     
-    corrected = data[:]
     for i in range(len(data)):
-        if i not in valid_indices:
-            # Finde nächsten validen vorher und nachher
-            prev_i = max([j for j in valid_indices if j < i], default=None)
-            next_i = min([j for j in valid_indices if j > i], default=None)
-            if prev_i is not None and next_i is not None:
-                prev_t, prev_h, prev_v = data[prev_i]
-                next_t, next_h, next_v = data[next_i]
-                curr_t = data[i][0]
-                # Lineare Interpolation
-                factor = (curr_t - prev_t) / (next_t - prev_t)
-                h = prev_h + (next_h - prev_h) * factor
-                v = prev_v + (next_v - prev_v) * factor
-                corrected[i] = (curr_t, h, v)
+        t, h, v = data[i]
+        
+        if i == 0:
+            # Erster Punkt ist immer korrekt
+            corrected.append((t, h, v))
+            valid_velocities.append(v)
+        else:
+            # Prüfe ob Meereshöhe-Änderung <= 2m
+            height_valid = abs(h - data[i-1][1]) <= 2
+            
+            # Prüfe ob Geschwindigkeits-Änderung <= 50 km/h in 10 sec
+            last_v = corrected[i-1][2]
+            velocity_valid = abs(v - last_v) <= 50
+            
+            if height_valid and velocity_valid:
+                # Gültiger Punkt
+                corrected.append((t, h, v))
+                valid_velocities.append(v)
+            else:
+                # Fehlerhafter Punkt - ersetze Geschwindigkeit mit Durchschnitt
+                avg_velocity = sum(valid_velocities) / len(valid_velocities)
+                corrected.append((t, h, avg_velocity))
+    
     return corrected
 
 data = fix_errors(data)
 
 for entry in data:
     print(f"Zeit: {entry[0]}, Meereshöhe: {entry[1]:.1f}, Geschwindigkeit: {entry[2]:.1f}")   
+
+
+
+
+#Uebung 2:
+
+items = {
+    "Filzstift": {"einheiten": 3, "wert_pro_einheit": 1},
+    "Füllfeder": {"einheiten": 1, "wert_pro_einheit": 5},
+    "Radiergummi": {"einheiten": 40, "wert_pro_einheit": 0.5},
+    "Kreide": {"einheiten": 100, "wert_pro_einheit": 0.1}
+}
+
+rucksack_groesse = 10
+
+def bepacken_rucksack(items, rucksack_groesse):
+    # Bounded Knapsack: Dynamische Programmierung mit Beschränkung der Einheiten pro Item
+    # dp[i] = maximaler Wert mit Rucksackgröße i
+    dp = [0] * (rucksack_groesse + 1)
+    # Speichere welche Items für optimale Lösung verwendet wurden
+    chosen = [[] for _ in range(rucksack_groesse + 1)]
+    
+    for item_name, item_data in items.items():
+        max_einheiten = item_data["einheiten"]
+        wert_pro_einheit = item_data["wert_pro_einheit"]
+        
+        # Wichtig: Rückwärts durch die Rucksackgröße iterieren!
+        for groesse in range(rucksack_groesse, 0, -1):
+            # Versuche bis zu max_einheiten dieses Items hinzuzufügen
+            for anzahl in range(1, min(max_einheiten + 1, groesse + 1)):
+                if groesse >= anzahl:
+                    neuer_wert = dp[groesse - anzahl] + (anzahl * wert_pro_einheit)
+                    if neuer_wert > dp[groesse]:
+                        dp[groesse] = neuer_wert
+                        chosen[groesse] = chosen[groesse - anzahl] + [item_name] * anzahl
+    
+    return dp[rucksack_groesse], chosen[rucksack_groesse]
+
+max_wert, items_gewaehlt = bepacken_rucksack(items, rucksack_groesse)
+
+# Zähle die Items
+from collections import Counter
+items_count = Counter(items_gewaehlt)
+
+
+print(f"Rucksackgröße: {rucksack_groesse}")
+print(f"\nOptimale Bepackung:")
+for item, count in sorted(items_count.items()):
+    wert_pro_einheit = items[item]["wert_pro_einheit"]
+    gesamt_wert = count * wert_pro_einheit
+    print(f"  {count}x {item}: {count} Einheiten, {gesamt_wert}€")
+
+print(f"\nGesamtwert: {max_wert}€")
+
