@@ -1,5 +1,5 @@
 #Uebung 1
-"""
+
 def Zahlenfolge(n):
     
     while n !=0:
@@ -12,8 +12,8 @@ def Zahlenfolge(n):
         else:
             n = n - 1
             print(n)
-Zahlenfolge(50)
-"""
+Zahlenfolge(120)
+
 
 
 #Uebung 2

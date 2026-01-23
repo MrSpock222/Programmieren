@@ -18,7 +18,7 @@ def palindrom(zahl):
         return True
     else:
         return False
-print(palindrom(232))
+print(palindrom(2323))
 
 
 #Uebung 3
